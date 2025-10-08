@@ -30,77 +30,33 @@ namespace Gibet_Autoservice
         }
 
 
-        //private void UpdateSerices()
-        //{
-        //    var currentServices = ГибетАвтосервисEntities.GetContext().Service.ToList();
-
-        //    // Фильтрация по диапазонам скидки
-        //    switch (ComboType.SelectedIndex)
-        //    {
-        //        case 0: // Все
-        //            currentServices = currentServices.Where(p => Convert.ToInt32(p.Discount) >= 0 && Convert.ToInt32(p.Discount) <= 100).ToList();
-        //            break;
-        //        case 1:
-        //            currentServices = currentServices.Where(p => Convert.ToInt32(p.Discount) >= 0 && Convert.ToInt32(p.Discount) < 5).ToList();
-        //            break;
-        //        case 2:
-        //            currentServices = currentServices.Where(p => Convert.ToInt32(p.Discount) >= 5 && Convert.ToInt32(p.Discount) < 15).ToList();
-        //            break;
-        //        case 3:
-        //            currentServices = currentServices.Where(p => Convert.ToInt32(p.Discount) >= 15 && Convert.ToInt32(p.Discount) < 30).ToList();
-        //            break;
-        //        case 4:
-        //            currentServices = currentServices.Where(p => Convert.ToInt32(p.Discount) >= 30 && Convert.ToInt32(p.Discount) < 70).ToList();
-        //            break;
-        //        case 5:
-        //            currentServices = currentServices.Where(p => Convert.ToInt32(p.Discount) >= 70 && Convert.ToInt32(p.Discount) <= 100).ToList();
-        //            break;
-        //    }
-
-        //    // Фильтрация по поисковому запросу
-        //    string searchText = TBoxSearch.Text.ToLower();
-        //    currentServices = currentServices.Where(p => p.Title.ToLower().Contains(searchText)).ToList();
-
-        //    // Сортировка
-        //    if (RButtonDown.IsChecked == true)
-        //    {
-        //        currentServices = currentServices.OrderByDescending(p => p.Cost).ToList();
-        //    }
-        //    else if (RButtonUp.IsChecked == true)
-        //    {
-        //        currentServices = currentServices.OrderBy(p => p.Cost).ToList();
-        //    }
-
-        //    // Обновление отображения
-        //    ServiceListView.ItemsSource = currentServices;
-        //}
-
+        
         private void UpdateSerices()
         {
             var currentServices = ГибетАвтосервисEntities.GetContext().Service.ToList();
             if (ComboType.SelectedIndex == 0)
             {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 0 && Convert.ToInt32(p.Discount) <= 100)).ToList();
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.DiscountIt) >= 0 && Convert.ToInt32(p.DiscountIt) <= 100)).ToList();
             }
             if (ComboType.SelectedIndex == 1)
             {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 0 && Convert.ToInt32(p.Discount) < 5)).ToList();
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.DiscountIt) >= 0 && Convert.ToInt32(p.DiscountIt) < 5)).ToList();
             }
             if (ComboType.SelectedIndex == 2)
             {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 5 && Convert.ToInt32(p.Discount) < 15)).ToList();
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.DiscountIt) >= 5 && Convert.ToInt32(p.DiscountIt) < 15)).ToList();
             }
             if (ComboType.SelectedIndex == 3)
             {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 15 && Convert.ToInt32(p.Discount) < 30)).ToList();
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.DiscountIt) >= 15 && Convert.ToInt32(p.DiscountIt) < 30)).ToList();
             }
             if (ComboType.SelectedIndex == 4)
             {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 30 && Convert.ToInt32(p.Discount) < 70)).ToList();
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.DiscountIt) >= 30 && Convert.ToInt32(p.DiscountIt) < 70)).ToList();
             }
             if (ComboType.SelectedIndex == 5)
             {
-                currentServices = currentServices.Where(p => (Convert.ToInt32(p.Discount) >= 70 && Convert.ToInt32(p.Discount) <= 100)).ToList();
+                currentServices = currentServices.Where(p => (Convert.ToInt32(p.DiscountIt) >= 70 && Convert.ToInt32(p.DiscountIt) <= 100)).ToList();
             }
             currentServices = currentServices.Where(p => p.Title.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
             ServiceListView.ItemsSource = currentServices.ToList();
