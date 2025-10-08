@@ -13,11 +13,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace Gibet_Autoservice
 {
-    /// <summary>
-    /// Логика взаимодействия для ServicePage.xaml
-    /// </summary>
+
     public partial class ServicePage : Page
     {
         public ServicePage()
@@ -30,7 +29,11 @@ namespace Gibet_Autoservice
         }
 
 
-        
+        int CountRecords;
+        int CountPage;
+        int CurrentPage = 0;
+        List<Service> CurrentPageList = new List<Service>();
+        List<Service> TableList;
         private void UpdateSerices()
         {
             var currentServices = ГибетАвтосервисEntities.GetContext().Service.ToList();
@@ -63,13 +66,16 @@ namespace Gibet_Autoservice
 
             if (RButtonDown.IsChecked.Value)
             {
-                ServiceListView.ItemsSource = currentServices.OrderByDescending(p => p.Cost).ToList();
+                currentServices = currentServices.OrderByDescending(p => p.Cost).ToList();
             }
 
             if (RButtonUp.IsChecked.Value)
             {
-                ServiceListView.ItemsSource = currentServices.OrderBy(p => p.Cost).ToList();
+                currentServices = currentServices.OrderBy(p => p.Cost).ToList();
             }
+            ServiceListView.ItemsSource = currentServices;
+            TableList = currentServices;
+            ChangePage(0, 0);
         }
         private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -92,11 +98,131 @@ namespace Gibet_Autoservice
             UpdateSerices();
         }
 
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var currentService = (sender as Button).DataContext as Service;
+            var currentClientServices = ГибетАвтосервисEntities.GetContext().ClientService.ToList();
+            currentClientServices = currentClientServices.Where(p => p.ServiceID == currentService.ID).ToList();
+            if (currentClientServices.Count != 0)
+                MessageBox.Show("Невозможно выполнить удаление, так как существуют записи на эту услугу");
+            else
+            {
+                if (MessageBox.Show("Вы точно хотите выполнить удаление?", "Внимание!",
+                MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        ГибетАвтосервисEntities.GetContext().Service.Remove(currentService);
+                        ГибетАвтосервисEntities.GetContext().SaveChanges();
+                        ServiceListView.ItemsSource = ГибетАвтосервисEntities.GetContext().Service.ToList();
+                        UpdateSerices();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message.ToString());
+                    }
 
-        //private void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    Manager.MainFrame.Navigate(new AddEditPage());
-        //}
+                }
+            }
+            
+        }
+
+        
+        public void ChangePage(int direction, int? selectPage)
+        {
+            CurrentPageList.Clear();
+            CountRecords = TableList.Count;
+            if (CountRecords % 10 > 0)
+            {
+                CountPage = CountRecords / 10 + 1;
+            }
+            else
+            {
+                CountPage = CountRecords / 10;
+            }
+            Boolean Ifupdate = true;
+            int min;
+            if (selectPage.HasValue)
+            {
+                if (selectPage >= 0 && selectPage <= CountPage)
+                {
+                    CurrentPage = (int)selectPage;
+                    min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
+                    for(int i = CurrentPage*10; i < min; i++)
+                    {
+                        CurrentPageList.Add(TableList[i]);
+                    }
+                }
+            }
+            else
+            {
+                switch (direction)
+                {
+                    case 1:
+                        if (CurrentPage > 0)
+                        {
+                            CurrentPage--;
+                            min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
+                            for (int i = CurrentPage * 10; i < min; i++)
+                            {
+                                CurrentPageList.Add(TableList[i]);
+                            }
+                        }
+                        else
+                        {
+                            Ifupdate = false;
+                        }
+                        break;
+
+                    case 2:
+                        if(CurrentPage < CountPage - 1)
+                        {
+                            CurrentPage++;
+                            min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
+                            for (int i = CurrentPage * 10; i < min; i++)
+                            {
+                                CurrentPageList.Add(TableList[i]);
+                            }
+                        }
+                        else
+                        {
+                            Ifupdate = false;
+                        }
+                        break;
+                }
+            }
+            if (Ifupdate)
+            {
+                PageListBox.Items.Clear();
+                for (int i = 1; i <= CountPage; i++)
+                {
+                    PageListBox.Items.Add(i);
+                }
+                PageListBox.SelectedIndex = CurrentPage;
+
+                min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
+                TBCount.Text = min.ToString();
+                TBAllRecords.Text = " из " + CountRecords.ToString();
+
+                ServiceListView.ItemsSource = CurrentPageList;
+                ServiceListView.Items.Refresh();
+            }
+        }
+
+        private void PageListBox_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            ChangePage(0, Convert.ToInt32(PageListBox.SelectedItem.ToString()) - 1);
+        }
+        private void LeftDirButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChangePage(1, null);
+        }
+
+        private void RightDirButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChangePage(2, null);
+        }
+
     }
     
 }
