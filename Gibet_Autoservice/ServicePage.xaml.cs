@@ -223,6 +223,32 @@ namespace Gibet_Autoservice
             ChangePage(2, null);
         }
 
+        private void AddBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddEditPage(null));
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddEditPage((sender as Button).DataContext as Service));
+        }
+
+        private void Page_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if(Visibility == Visibility.Visible)
+            {
+                ГибетАвтосервисEntities.GetContext().ChangeTracker.Entries().ToList().ForEach(p => p.Reload());
+                ServiceListView.ItemsSource = ГибетАвтосервисEntities.GetContext().Service.ToList();
+                UpdateSerices();
+
+            }
+            UpdateSerices();
+        }
     }
     
 }
