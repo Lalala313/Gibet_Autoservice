@@ -15,8 +15,12 @@ namespace Gibet_Autoservice
     
     public partial class ГибетАвтосервисEntities : DbContext
     {
-        public static ГибетАвтосервисEntities _context;
+        private static ГибетАвтосервисEntities _context;
 
+        public ГибетАвтосервисEntities()
+            : base("name=ГибетАвтосервисEntities")
+        {
+        }
         public static ГибетАвтосервисEntities GetContext()
         {
             if (_context == null)
@@ -24,11 +28,7 @@ namespace Gibet_Autoservice
             return _context;
         }
 
-        public ГибетАвтосервисEntities()
-            : base("name=ГибетАвтосервисEntities")
-        {
-        }
-    
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

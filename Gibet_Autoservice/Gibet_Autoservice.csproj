@@ -119,6 +119,9 @@
     <Compile Include="ServicePhoto.cs">
       <DependentUpon>GibetModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="SignUpPage.xaml.cs">
+      <DependentUpon>SignUpPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tag.cs">
       <DependentUpon>GibetModel.tt</DependentUpon>
     </Compile>
@@ -139,6 +142,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ServicePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SignUpPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -165,6 +172,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>GibetModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="App.Config" />
     <None Include="GibetModel.edmx.diagram">
       <DependentUpon>GibetModel.edmx</DependentUpon>
     </None>
@@ -173,9 +181,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\service_logo.png" />
@@ -187,16 +192,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="GibetModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>GibetModel.edmx</DependentUpon>
-      <LastGenOutput>GibetModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="GibetModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>GibetModel.edmx</DependentUpon>
-      <LastGenOutput>GibetModel.cs</LastGenOutput>
-    </Content>
     <Resource Include="Images\picture.png" />
     <Resource Include="Услуги автосервиса\diz.jpg" />
     <Resource Include="Услуги автосервиса\rulevoe-upravlenie-avtomobilya.jpg" />
@@ -215,6 +210,18 @@
     <Resource Include="Услуги автосервиса\Топливная система.png" />
     <Resource Include="Услуги автосервиса\Шиномонтаж.jpg" />
     <Resource Include="Услуги автосервиса\Электрика.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="GibetModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>GibetModel.edmx</DependentUpon>
+      <LastGenOutput>GibetModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="GibetModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>GibetModel.edmx</DependentUpon>
+      <LastGenOutput>GibetModel.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

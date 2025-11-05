@@ -38,29 +38,45 @@ namespace Gibet_Autoservice
                 errors.AppendLine("Укажите стоимость услуги");
             if (_currentService.DiscountIt < 0 || _currentService.DiscountIt > 100)
                 errors.AppendLine("Укажите скидку");
-            if (string.IsNullOrEmpty(_currentService.Duration))
+            if (_currentService.Duration == 0)
                 errors.AppendLine("Укажите длительность услуги");
+
+            if (_currentService.Duration > 240 || _currentService.Duration < 0)
+                errors.AppendLine("Длительность не может быть больше 240 или меньше 0!");
 
             if (errors.Length > 0)
             {
                 MessageBox.Show(errors.ToString());
                 return;
             }
-            if (_currentService.ID == 0)
+
+            var allServices = ГибетАвтосервисEntities.GetContext().Service.ToList();
+            allServices = allServices.Where(p => p.Title == _currentService.Title && p.ID != _currentService.ID).ToList();
+
+            if(allServices.Count==0)
             {
-                ГибетАвтосервисEntities.GetContext().Service.Add(_currentService);
+                if(_currentService.ID == 0)
+                {
+                    ГибетАвтосервисEntities.GetContext().Service.Add(_currentService);
+                }
+
+                try
+                {
+                    ГибетАвтосервисEntities.GetContext().SaveChanges();
+                    MessageBox.Show("Информация сохранена!");
+                    Manager.MainFrame.GoBack();
+                }
+                catch (Exception ex) 
+                {
+                    MessageBox.Show(ex.Message.ToString());
+                }
+            }
+            else
+            {
+                MessageBox.Show("Уже существует такая услуга");
+                return;
             }
 
-            try
-            {
-                ГибетАвтосервисEntities.GetContext().SaveChanges();
-                MessageBox.Show("Информация сохранена!");
-                Manager.MainFrame.GoBack();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message.ToString());
-            }
         }
     }
 }

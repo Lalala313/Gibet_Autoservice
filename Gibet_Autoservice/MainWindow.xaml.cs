@@ -15,7 +15,6 @@ using System.Windows.Shapes;
 
 namespace Gibet_Autoservice
 {
-    /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
